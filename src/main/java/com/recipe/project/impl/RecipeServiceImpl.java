@@ -1,9 +1,13 @@
 package com.recipe.project.impl;
 
+import com.recipe.project.commands.RecipeCommand;
+import com.recipe.project.converters.RecipeCommandToRecipe;
+import com.recipe.project.converters.RecipeToRecipeCommand;
 import com.recipe.project.domain.Recipe;
 import com.recipe.project.repositories.RecipeRepository;
 import com.recipe.project.services.RecipeService;
 import com.sun.org.apache.regexp.internal.RE;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +18,16 @@ import java.util.Set;
 /**
  * Created by aah on 26/11/17.
  */
+@Slf4j
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private RecipeCommandToRecipe recipeCommandToRecipe;
+    @Autowired
+    private RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Override
     public Set<Recipe> getRecipes() {
@@ -39,5 +48,16 @@ public class RecipeServiceImpl implements RecipeService {
        }
 
         return recipeOptional.get() ;
+    }
+
+    @Override
+    public RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand) {
+
+        Recipe detachedRecipe = recipeCommandToRecipe.convert(recipeCommand);
+
+        Recipe savedRecipe = recipeRepository.save(detachedRecipe);
+        log.debug("saved Recipe: ", savedRecipe.getId());
+
+        return recipeToRecipeCommand.convert(savedRecipe);
     }
 }
