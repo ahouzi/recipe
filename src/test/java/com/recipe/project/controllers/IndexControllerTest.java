@@ -2,6 +2,7 @@ package com.recipe.project.controllers;
 
 import com.recipe.project.domain.Recipe;
 import com.recipe.project.services.RecipeService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
@@ -18,6 +19,8 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 /**
  * Created by aah on 27/11/17.
@@ -35,12 +38,17 @@ public class IndexControllerTest {
     @InjectMocks
     IndexController indexController;
 
+    MockMvc mockMvc;
+
+    @Before
+    public void setUp() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+    }
+
     @Test
     public void testMockMvc() throws Exception {
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).
+        mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(status().isOk()).
                 andExpect(MockMvcResultMatchers.view().name("index"));
     }
 
@@ -67,7 +75,7 @@ public class IndexControllerTest {
 
         assertEquals(2,setInController.size());
 
-
     }
+
 
 }
