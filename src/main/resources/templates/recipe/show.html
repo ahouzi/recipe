@@ -51,15 +51,15 @@
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p>Easy</p>
+                                <p th:text="${recipe.difficulty}">Easy</p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <h5 >Cooktime:</h5>
+                                <h5>Cooktime:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p th:text="${recipe.cookTime}"> 30 min</p>
+                                <p th:text="${(recipe.cookTime  +  '  Min')}">30 min</p>
                             </div>
                             <div class="col-md-3">
                                 <h5>Servings:</h5>
@@ -79,7 +79,7 @@
                                 <h5>URL:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p th:text="${recipe.url}">http://www.example.com</p>
+                                <p><a href="#" th:href="@{recipe.url}" >View Original</a></p>
                             </div>
                         </div>
                     </div>
