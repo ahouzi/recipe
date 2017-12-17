@@ -10,8 +10,10 @@ import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -72,4 +74,30 @@ public class RecipeServiceImpl implements RecipeService {
     public void deleteById(Long idToDelete) {
         recipeRepository.deleteById(idToDelete);
     }
+
+
+    @Override
+    public void saveImageFile(Long recipeId, MultipartFile file) {
+
+        try {
+            Recipe recipe = recipeRepository.findById(recipeId).get();
+
+            Byte[] byteObjects = new Byte[file.getBytes().length];
+
+            int i = 0;
+
+            for (byte b : file.getBytes()){
+                byteObjects[i++] = b;
+            }
+
+            recipe.setImage(byteObjects);
+
+            recipeRepository.save(recipe);
+        } catch (IOException e) {
+            //todo handle better
+            log.error("Error occurred", e);
+        }
+    }
+
+
 }

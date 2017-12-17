@@ -2,6 +2,7 @@ package com.recipe.project.services;
 
 import com.recipe.project.commands.RecipeCommand;
 import com.recipe.project.domain.Recipe;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.Set;
@@ -20,4 +21,6 @@ public interface RecipeService {
     RecipeCommand getRecipeCommandById(Long aLong);
 
     void deleteById(Long idToDelete);
+
+    void saveImageFile(Long id, MultipartFile multipartFile);
 }
