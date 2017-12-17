@@ -35,14 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeControllerTest {
 
-
     @Mock
     RecipeService recipeService;
-
     @Mock
     Model model;
-
-
     @InjectMocks
     RecipeController recipeController ;
 
