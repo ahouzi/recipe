@@ -1,7 +1,9 @@
 package com.recipe.project.controllers;
 
+import com.recipe.project.commands.IngredientCommand;
 import com.recipe.project.commands.RecipeCommand;
 import com.recipe.project.domain.Recipe;
+import com.recipe.project.services.IngredientService;
 import com.recipe.project.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +34,8 @@ public class IngredientControllerTest {
 
     @Mock
     RecipeService recipeService;
+    @Mock
+    IngredientService ingredientService;
     @Mock
     Model model;
     @InjectMocks
@@ -64,6 +68,20 @@ public class IngredientControllerTest {
     }
 
 
+    @Test
+    public void testShowIngredient() throws Exception {
+        //given
+        IngredientCommand ingredientCommand = new IngredientCommand();
+
+        //when
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+
+        //then
+        mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
+    }
 
 
 

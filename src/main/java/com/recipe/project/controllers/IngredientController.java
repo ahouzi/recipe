@@ -1,6 +1,7 @@
 package com.recipe.project.controllers;
 
 import com.recipe.project.commands.RecipeCommand;
+import com.recipe.project.services.IngredientService;
 import com.recipe.project.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class IngredientController {
 
     @Autowired
     private RecipeService recipeService;
+    @Autowired
+    private IngredientService ingredientService;
 
 
 
@@ -30,6 +33,17 @@ public class IngredientController {
 
         return "recipe/ingredient/list";
     }
+
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/{id}/show")
+    public String showIngredient(@PathVariable String recipeId, @PathVariable String id,Model model){
+
+        model.addAttribute("ingredient",ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId),Long.valueOf(id)));
+
+        return "recipe/ingredient/show";
+    }
+
 
 
 
