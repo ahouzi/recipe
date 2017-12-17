@@ -65,10 +65,8 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <option th:each="diffucltyValue : ${T(com.recipe.project.domain.type.Difficulty).values()}" th:value="${diffucltyValue.name()}" th:text="${diffucltyValue.name()}">Value</option>
                                     </select>
                                 </div>
                             </div>

@@ -16,13 +16,14 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/show")
+    //this is optimal
+    @GetMapping("/recipe/{id}/show")
     public String getRecipe(Model model, @PathVariable String id ) {
         model.addAttribute("recipe",recipeService.getRecipeById(Long.valueOf(id)));
         return "recipe/show";
     }
 
+    //this is not optimal
     @GetMapping
     @RequestMapping("/recipe/new")
     public String newRecipe(Model model){
