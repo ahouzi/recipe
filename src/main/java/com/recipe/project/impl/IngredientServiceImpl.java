@@ -1,11 +1,14 @@
 package com.recipe.project.impl;
 
 import com.recipe.project.commands.IngredientCommand;
+import com.recipe.project.converters.IngredientCommandToIngredient;
 import com.recipe.project.converters.IngredientToIngredientCommand;
 import com.recipe.project.converters.RecipeCommandToRecipe;
 import com.recipe.project.converters.RecipeToRecipeCommand;
+import com.recipe.project.domain.Ingredient;
 import com.recipe.project.domain.Recipe;
 import com.recipe.project.repositories.RecipeRepository;
+import com.recipe.project.repositories.UnitOfMeasureRepository;
 import com.recipe.project.services.IngredientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,10 @@ public class IngredientServiceImpl  implements IngredientService {
     private RecipeRepository recipeRepository;
     @Autowired
     private IngredientToIngredientCommand ingredientToIngredientCommand;
+    @Autowired
+    private IngredientCommandToIngredient ingredientCommandToIngredient;
+    @Autowired
+    private UnitOfMeasureRepository unitOfMeasureRepository;
 
     @Override
     public IngredientCommand findByRecipeIdAndIngredientId(long recipeId, long ingredientId) {
@@ -52,4 +59,50 @@ public class IngredientServiceImpl  implements IngredientService {
 
         return ingredientCommandOptional.get();
     }
+
+    @Override
+    public IngredientCommand saveIngredientCommand(IngredientCommand command) {
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(command.getRecipeId());
+
+        if(!recipeOptional.isPresent()){
+
+            //todo toss error if not found!
+            log.error("Recipe not found for id: " + command.getRecipeId());
+            return new IngredientCommand();
+        } else {
+
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredientList().stream()
+                    .filter(ingredient -> ingredient.getId().equals(command.getId()) ).findFirst();
+
+            if (ingredientOptional.isPresent()){
+
+               Ingredient ingredientFound = ingredientOptional.get();
+               ingredientFound.setAmount(command.getAmount());
+               ingredientFound.setDescription(command.getDescription());
+               ingredientFound.setUom(unitOfMeasureRepository.findById(command.getUnitOfMeasure().getId()).orElseThrow(
+                       () -> new RuntimeException("UOM not found")
+               ));
+
+
+            }else {
+            recipe.addIngredient(ingredientCommandToIngredient.convert(command));
+
+            }
+
+            Recipe savedRecipe = recipeRepository.save(recipe);
+
+            //to do check for fail
+            return ingredientToIngredientCommand.convert(savedRecipe.getIngredientList().stream()
+                    .filter(recipeIngredients -> recipeIngredients.getId().equals(command.getId()))
+                    .findFirst()
+                    .get());
+
+
+        }
+
+    }
+
 }

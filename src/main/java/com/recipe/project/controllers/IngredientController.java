@@ -1,8 +1,10 @@
 package com.recipe.project.controllers;
 
+import com.recipe.project.commands.IngredientCommand;
 import com.recipe.project.commands.RecipeCommand;
 import com.recipe.project.services.IngredientService;
 import com.recipe.project.services.RecipeService;
+import com.recipe.project.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,9 @@ public class IngredientController {
     private RecipeService recipeService;
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired
+    private UnitOfMeasureService unitOfMeasureService;
 
 
 
@@ -44,6 +49,28 @@ public class IngredientController {
         return "recipe/ingredient/show";
     }
 
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/{id}/update")
+    public String updateIngredient(@PathVariable String recipeId, @PathVariable String id,Model model){
+
+        model.addAttribute("ingredient",ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId),Long.valueOf(id)));
+
+        model.addAttribute("uomList",unitOfMeasureService.listAllUoms());
+
+        return "recipe/ingredient/ingredientForm";
+    }
+
+    @PostMapping
+    @RequestMapping("recipe/{recipeId}/ingredient")
+    public String saveOrUpdate(@ModelAttribute IngredientCommand command){
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+
+        log.debug("saved receipe id:" + savedCommand.getRecipeId());
+        log.debug("saved ingredient id:" + savedCommand.getId());
+
+        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+    }
 
 
 
