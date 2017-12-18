@@ -4,6 +4,7 @@ import com.recipe.project.commands.RecipeCommand;
 import com.recipe.project.converters.RecipeCommandToRecipe;
 import com.recipe.project.converters.RecipeToRecipeCommand;
 import com.recipe.project.domain.Recipe;
+import com.recipe.project.exceptions.NotFoundException;
 import com.recipe.project.repositories.RecipeRepository;
 import com.recipe.project.services.RecipeService;
 import com.sun.org.apache.regexp.internal.RE;
@@ -48,7 +49,7 @@ public class RecipeServiceImpl implements RecipeService {
        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
        if (!recipeOptional.isPresent()){
-           throw new RuntimeException("recipe not found");
+           throw new NotFoundException("recipe not found");
        }
 
         return recipeOptional.get() ;

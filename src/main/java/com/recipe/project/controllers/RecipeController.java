@@ -1,15 +1,21 @@
 package com.recipe.project.controllers;
 
 import com.recipe.project.commands.RecipeCommand;
+import com.recipe.project.exceptions.NotFoundException;
 import com.recipe.project.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +23,7 @@ import java.io.InputStream;
 /**
  * Created by aah on 16/12/17.
  */
+@Slf4j
 @Controller
 public class RecipeController {
 
@@ -25,7 +32,7 @@ public class RecipeController {
 
     //this is optimal
     @GetMapping("/recipe/{id}/show")
-    public String getRecipe(Model model, @PathVariable String id ) {
+    public String getRecipe(Model model, @PathVariable String id ){
         model.addAttribute("recipe",recipeService.getRecipeById(Long.valueOf(id)));
         return "recipe/show";
     }
@@ -54,9 +61,17 @@ public class RecipeController {
 
 
 
-    @PostMapping
-    @RequestMapping("recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand recipeCommand){
+    @PostMapping("recipe")
+    public String saveOrUpdate(@Valid @ModelAttribute("recipeForm") RecipeCommand recipeCommand, BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            bindingResult.getAllErrors().forEach(objectError -> {
+                log.debug(objectError.toString());
+            });
+
+            return "recipe/recipeForm";
+        }
+
         RecipeCommand savedRecipe = recipeService.saveRecipeCommand(recipeCommand);
         return "redirect:/recipe/" + savedRecipe.getId() +  "/show" ;
     }
@@ -95,6 +110,16 @@ public class RecipeController {
         }
     }
 
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleNotFound(){
+
+    ModelAndView modelAndView = new ModelAndView();
+    modelAndView.setViewName("error-404");
+    return  modelAndView;
+
+    }
 
 
 }

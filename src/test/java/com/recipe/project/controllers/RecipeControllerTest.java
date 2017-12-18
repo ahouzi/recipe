@@ -2,6 +2,7 @@ package com.recipe.project.controllers;
 
 import com.recipe.project.commands.RecipeCommand;
 import com.recipe.project.domain.Recipe;
+import com.recipe.project.exceptions.NotFoundException;
 import com.recipe.project.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +69,18 @@ public class RecipeControllerTest {
 
 
     @Test
+    public void getRecipeNotFound() throws Exception {
+
+
+        when(recipeService.getRecipeById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show")).andExpect(status().isNotFound()).
+                andExpect(view().name("error-404"));
+
+    }
+
+
+    @Test
     public void testGetNewRecipeForm() throws Exception {
         RecipeCommand command = new RecipeCommand();
 
@@ -89,10 +102,28 @@ public class RecipeControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
                 .param("description", "some string")
+                .param("directions", "some directions")
         )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/show"));
     }
+
+
+    @Test
+    public void testPostNewRecipeFormValidationFail() throws Exception {
+
+
+        mockMvc.perform(post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "")
+
+        )
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipeForm"))
+                .andExpect(view().name("recipe/recipeForm"));
+    }
+
+
 
     @Test
     public void testGetUpdateView() throws Exception {
