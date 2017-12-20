@@ -1,5 +1,6 @@
 package com.recipe.project.controllers;
 
+import com.google.gson.JsonObject;
 import com.recipe.project.commands.RecipeCommand;
 import com.recipe.project.exceptions.NotFoundException;
 import com.recipe.project.services.RecipeService;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +31,24 @@ public class RecipeController {
 
     @Autowired
     private RecipeService recipeService;
+
+
+
+    @RequestMapping(value = "/paiement/montantfavoris",
+            method = RequestMethod.GET, produces = {"application/json; charset=UTF-8"})
+    @ResponseBody
+    public ResponseEntity<String> getMontantGlobalImpayesByFavoris()
+             {
+        JsonObject responseJson = new JsonObject();
+
+            responseJson.addProperty("type", "msg");
+            responseJson.addProperty("val", "رمز إعادة تعيين أرسل إليك الآن إلى البريد الإلكتروني الذي صرحت به");
+            return new ResponseEntity<String>(responseJson.toString(), HttpStatus.OK);
+
+    }
+
+
+
 
     //this is optimal
     @GetMapping("/recipe/{id}/show")

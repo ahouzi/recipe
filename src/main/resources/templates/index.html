@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+
+
+
     <meta charset="UTF-8"/>
     <title>Recipe Home</title>
 
@@ -15,8 +18,36 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+
+
+    <script type="text/javascript" th:inline="text">
+
+        function getUnpaid(){
+            var request = $.ajax({
+                url: '[[@{/paiement/montantfavoris}]]',
+                method: "GET"
+            });
+
+            request.done(function( msg ) {
+
+                if(msg.type==="msg"){
+
+                    var myDivElement = $( "#myId" );
+
+                    myDivElement.empty().text(msg.val).show();
+
+
+                }
+            });
+        }
+        /*]]>*/
+
+    </script>
+
 </head>
-<body>
+<body onload="getUnpaid();">
+
+<p id="myId"></p>
 
 <div class="container-fluid" style="margin-top: 20px">
 
@@ -63,6 +94,13 @@
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+<div >
+
 </div>
 
 </body>
