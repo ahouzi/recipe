@@ -53,7 +53,7 @@ public class RecipeController {
     //this is optimal
     @GetMapping("/recipe/{id}/show")
     public String getRecipe(Model model, @PathVariable String id ){
-        model.addAttribute("recipe",recipeService.getRecipeById(Long.valueOf(id)));
+        model.addAttribute("recipe",recipeService.getRecipeById(id));
         return "recipe/show";
     }
 
@@ -68,14 +68,14 @@ public class RecipeController {
     @GetMapping
     @RequestMapping("/recipe/{id}/update")
     public String updateRecipe(Model model, @PathVariable String id ) {
-        model.addAttribute("recipeForm",recipeService.getRecipeCommandById(Long.valueOf(id)));
+        model.addAttribute("recipeForm",recipeService.getRecipeCommandById(id));
         return "recipe/recipeForm";
     }
 
     @GetMapping
     @RequestMapping("/recipe/{id}/delete")
     public String deleteRecipe(@PathVariable String id ) {
-        recipeService.deleteById(Long.valueOf(id));
+        recipeService.deleteById(id);
         return "redirect:/";
     }
 
@@ -99,7 +99,7 @@ public class RecipeController {
 
     @GetMapping("recipe/{id}/image")
     public String showUploadForm(@PathVariable String id, Model model){
-        model.addAttribute("recipe", recipeService.getRecipeCommandById(Long.valueOf(id)));
+        model.addAttribute("recipe", recipeService.getRecipeCommandById(id));
 
         return "recipe/imageUploadForm";
     }
@@ -107,14 +107,14 @@ public class RecipeController {
     @PostMapping("recipe/{id}/image")
     public String handleImagePost(@PathVariable String id, @RequestParam("imagefile") MultipartFile file){
 
-        recipeService.saveImageFile(Long.valueOf(id), file);
+        recipeService.saveImageFile(id, file);
 
         return "redirect:/recipe/" + id + "/show";
     }
 
     @GetMapping("recipe/{id}/recipeimage")
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) throws IOException {
-        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(Long.valueOf(id));
+        RecipeCommand recipeCommand = recipeService.getRecipeCommandById(id);
 
         if (recipeCommand.getImage() != null) {
             byte[] byteArray = new byte[recipeCommand.getImage().length];

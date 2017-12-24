@@ -35,7 +35,7 @@ public class IngredientServiceImpl  implements IngredientService {
     private UnitOfMeasureRepository unitOfMeasureRepository;
 
     @Override
-    public IngredientCommand findByRecipeIdAndIngredientId(long recipeId, long ingredientId) {
+    public IngredientCommand findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {
 
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
 

@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * Created by aah on 26/11/17.
  */
-public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure,Long> {
+public interface UnitOfMeasureRepository extends CrudRepository<UnitOfMeasure,String> {
 
     Optional<UnitOfMeasure> findByUom(String uom);
 }

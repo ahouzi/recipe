@@ -10,17 +10,10 @@ import java.util.Set;
  * Created by aah on 25/11/17.
  */
 @Data
-@Entity
 public class Notes {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne
+    private String id;
     private Recipe recipe;
-
-    @Lob
     private String recipeNotes;
 
 }

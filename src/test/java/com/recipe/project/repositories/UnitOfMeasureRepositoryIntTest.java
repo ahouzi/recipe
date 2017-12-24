@@ -3,6 +3,7 @@ package com.recipe.project.repositories;
 
 import com.recipe.project.domain.UnitOfMeasure;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Ignore
 public class UnitOfMeasureRepositoryIntTest {
 
 

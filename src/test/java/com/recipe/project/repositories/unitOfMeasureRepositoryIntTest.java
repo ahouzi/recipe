@@ -2,6 +2,7 @@ package com.recipe.project.repositories;
 
 import com.recipe.project.domain.UnitOfMeasure;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,8 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class UnitOfMeasureRepositoryTest {
+@Ignore
+public class unitOfMeasureRepositoryIntTest {
 
     @Autowired
     UnitOfMeasureRepository unitOfMeasureRepository;

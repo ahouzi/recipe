@@ -44,7 +44,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe getRecipeById(Long id) {
+    public Recipe getRecipeById(String id) {
 
        Optional<Recipe> recipeOptional = recipeRepository.findById(id);
 
@@ -67,18 +67,19 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public RecipeCommand getRecipeCommandById(Long aLong) {
+    public RecipeCommand getRecipeCommandById(String  aLong) {
         return recipeToRecipeCommand.convert(getRecipeById(aLong));
     }
 
     @Override
-    public void deleteById(Long idToDelete) {
+    public void deleteById(String  idToDelete) {
         recipeRepository.deleteById(idToDelete);
     }
 
 
+
     @Override
-    public void saveImageFile(Long recipeId, MultipartFile file) {
+    public void saveImageFile(String recipeId, MultipartFile file) {
 
         try {
             Recipe recipe = recipeRepository.findById(recipeId).get();

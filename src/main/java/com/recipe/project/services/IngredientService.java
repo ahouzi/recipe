@@ -8,7 +8,7 @@ import com.recipe.project.commands.IngredientCommand;
 public interface IngredientService {
 
 
-    IngredientCommand findByRecipeIdAndIngredientId(long l, long l1);
+    IngredientCommand findByRecipeIdAndIngredientId(String  l, String l1);
 
     IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand);
 }

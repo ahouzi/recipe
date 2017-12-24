@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -58,9 +59,9 @@ public class RecipeControllerTest {
     public void getRecipe() throws Exception {
 
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("2");
 
-        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+        when(recipeService.getRecipeById(anyString())).thenReturn(recipe);
 
         mockMvc.perform(get("/recipe/1/show")).andExpect(status().isOk()).
                 andExpect(view().name("recipe/show")).andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
@@ -72,7 +73,7 @@ public class RecipeControllerTest {
     public void getRecipeNotFound() throws Exception {
 
 
-        when(recipeService.getRecipeById(anyLong())).thenThrow(NotFoundException.class);
+        when(recipeService.getRecipeById(anyString())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipe/1/show")).andExpect(status().isNotFound()).
                 andExpect(view().name("error-404"));
@@ -94,7 +95,7 @@ public class RecipeControllerTest {
     @Test
     public void testPostNewRecipeForm() throws Exception {
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
         when(recipeService.saveRecipeCommand(any())).thenReturn(command);
 
@@ -128,9 +129,9 @@ public class RecipeControllerTest {
     @Test
     public void testGetUpdateView() throws Exception {
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
-        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(command);
+        when(recipeService.getRecipeCommandById(anyString())).thenReturn(command);
 
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())
@@ -145,7 +146,7 @@ public class RecipeControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        verify(recipeService, times(1)).deleteById(anyLong());
+        verify(recipeService, times(1)).deleteById(anyString());
     }
 
 
@@ -154,16 +155,16 @@ public class RecipeControllerTest {
     public void getImageForm() throws Exception {
         //given
         RecipeCommand command = new RecipeCommand();
-        command.setId(1L);
+        command.setId("1");
 
-        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(command);
+        when(recipeService.getRecipeCommandById(anyString())).thenReturn(command);
 
         //when
         mockMvc.perform(get("/recipe/1/image"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("recipe"));
 
-        verify(recipeService, times(1)).getRecipeCommandById(anyLong());
+        verify(recipeService, times(1)).getRecipeCommandById(anyString());
 
     }
 
@@ -177,7 +178,7 @@ public class RecipeControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/recipe/1/show"));
 
-        verify(recipeService, times(1)).saveImageFile(anyLong(), any());
+        verify(recipeService, times(1)).saveImageFile(anyString(), any());
     }
 
     @Test
@@ -185,7 +186,7 @@ public class RecipeControllerTest {
 
         //given
         RecipeCommand command = new RecipeCommand();
-        command.setId(1L);
+        command.setId("1");
 
         String s = "fake image text";
         Byte[] bytesBoxed = new Byte[s.getBytes().length];
@@ -198,7 +199,7 @@ public class RecipeControllerTest {
 
         command.setImage(bytesBoxed);
 
-        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(command);
+        when(recipeService.getRecipeCommandById(anyString())).thenReturn(command);
 
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))

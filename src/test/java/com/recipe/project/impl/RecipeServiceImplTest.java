@@ -57,19 +57,19 @@ public class RecipeServiceImplTest {
     public void getRecipeById() throws Exception {
 
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1");
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
-        Recipe result = recipeService.getRecipeById(1L);
+        Recipe result = recipeService.getRecipeById("1");
 
-        assertEquals(Long.valueOf(1L),result.getId());
+        assertEquals("1",result.getId());
 
         assertNotNull("null value returned",result);
 
-        verify(recipeRepository,times(1)).findById(anyLong());
+        verify(recipeRepository,times(1)).findById(anyString());
         verify(recipeRepository,never()).findAll();
 
     }
@@ -79,7 +79,7 @@ public class RecipeServiceImplTest {
     public void testDeleteById() throws Exception {
 
         //given
-        Long idToDelete = Long.valueOf(2L);
+        String  idToDelete = "2";
 
         //when
         recipeService.deleteById(idToDelete);
@@ -87,14 +87,14 @@ public class RecipeServiceImplTest {
         //no 'when', since method has void return type
 
         //then
-        verify(recipeRepository, times(1)).deleteById(anyLong());
+        verify(recipeRepository, times(1)).deleteById(anyString());
     }
 
 
     @Test
     public void saveImageFile() throws Exception {
         //given
-        Long id = 1L;
+        String  id = "1";
         MultipartFile multipartFile = new MockMultipartFile("imagefile", "testing.txt", "text/plain",
                 "Spring Framework Guru".getBytes());
 
@@ -102,7 +102,7 @@ public class RecipeServiceImplTest {
         recipe.setId(id);
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
         ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 

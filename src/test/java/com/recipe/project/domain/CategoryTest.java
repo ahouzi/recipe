@@ -18,7 +18,7 @@ public class CategoryTest {
     }
     @Test
     public void setId() throws Exception {
-        Long aLong= Long.valueOf(4);
+        String aLong= "4";
         category.setId(aLong);
         assertEquals(aLong,category.getId());
     }

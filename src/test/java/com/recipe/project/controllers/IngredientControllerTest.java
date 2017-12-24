@@ -61,7 +61,7 @@ public class IngredientControllerTest {
 
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
-        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.getRecipeCommandById(anyString())).thenReturn(recipeCommand);
 
         //when
         mockMvc.perform(get("/recipe/1/ingredients"))
@@ -70,7 +70,7 @@ public class IngredientControllerTest {
                 .andExpect(model().attributeExists("recipe"));
 
         //then
-        verify(recipeService, times(1)).getRecipeCommandById(anyLong());
+        verify(recipeService, times(1)).getRecipeCommandById(anyString());
     }
 
 
@@ -80,7 +80,7 @@ public class IngredientControllerTest {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
         //when
-        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
 
         //then
         mockMvc.perform(get("/recipe/1/ingredient/2/show"))
@@ -94,10 +94,10 @@ public class IngredientControllerTest {
     public void testNewIngredientForm() throws Exception {
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(1L);
+        recipeCommand.setId("1");
 
         //when
-        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.getRecipeCommandById(anyString())).thenReturn(recipeCommand);
         when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
 
         //then
@@ -107,7 +107,7 @@ public class IngredientControllerTest {
                 .andExpect(model().attributeExists("ingredient"))
                 .andExpect(model().attributeExists("uomList"));
 
-        verify(recipeService, times(1)).getRecipeCommandById(anyLong());
+        verify(recipeService, times(1)).getRecipeCommandById(anyString());
 
     }
 

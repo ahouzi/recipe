@@ -14,13 +14,13 @@ public interface RecipeService {
 
     Set<Recipe> getRecipes();
 
-    Recipe getRecipeById(Long id);
+    Recipe getRecipeById(String  id);
 
     RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand );
 
-    RecipeCommand getRecipeCommandById(Long aLong);
+    RecipeCommand getRecipeCommandById(String aLong);
 
-    void deleteById(Long idToDelete);
+    void deleteById(String idToDelete);
 
-    void saveImageFile(Long id, MultipartFile multipartFile);
+    void saveImageFile(String id, MultipartFile multipartFile);
 }
