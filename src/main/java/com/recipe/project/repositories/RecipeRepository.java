@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * Created by aah on 26/11/17.
  */
-public interface RecipeRepository extends CrudRepository<Recipe,Long> {
+public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 }
