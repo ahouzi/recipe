@@ -44,7 +44,7 @@ public class RecipeCommand {
     @NotBlank
     private String directions;
 
-    private Set<IngredientCommand> ingredients = new HashSet<>();
+    private Set<IngredientCommand> ingredientList = new HashSet<>();
     private Byte[] image;
     private Difficulty difficulty;
     private NotesCommand notes;

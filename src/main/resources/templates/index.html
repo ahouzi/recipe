@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-
-
-
     <meta charset="UTF-8"/>
     <title>Recipe Home</title>
 
@@ -18,39 +15,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous" th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
-
-
-    <script type="text/javascript" th:inline="text">
-
-        function getUnpaid(){
-            var request = $.ajax({
-                url: '[[@{/paiement/montantfavoris}]]',
-                method: "GET"
-            });
-
-            request.done(function( msg ) {
-
-                if(msg.type==="msg"){
-
-                    var myDivElement = $( "#myId" );
-
-                    myDivElement.empty().text(msg.val).show();
-
-
-                }
-            });
-        }
-        /*]]>*/
-
-    </script>
-
 </head>
-<body onload="getUnpaid();">
-
-<p id="myId"></p>
-
+<body>
+<!--/*@thymesVar id="recipes" type="java.util.List"*/-->
+<!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
 <div class="container-fluid" style="margin-top: 20px">
-
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
@@ -67,26 +36,25 @@
                                 <th>Description</th>
                                 <th>View</th>
                                 <th>Update</th>
-                                <th>Remove</th>
+                                <th>Delete</th>
                             </tr>
                             </thead>
                             <tr th:remove="all">
-                                <td th:text="${recipe.id}">123</td>
-                                <td th:text="${recipe.description}">Tasty Goodnees 1</td>
+                                <td>123</td>
+                                <td>Tasty Goodnees 1</td>
                                 <td><a href="#">View</a></td>
                             </tr>
                             <tr th:remove="all">
-                                <td th:text="${recipe.id}">12333</td>
-                                <td th:text="${recipe.description}">Tasty Goodnees 2</td>
+                                <td>12333</td>
+                                <td>Tasty Goodnees 2</td>
                                 <td><a href="#">View</a></td>
                             </tr>
                             <tr th:each="recipe : ${recipes}">
-                                <!--/*@thymesVar id="recipe" type="guru.springframework.domain.Recipe"*/-->
                                 <td th:text="${recipe.id}">334</td>
                                 <td th:text="${recipe.description}">Tasty Goodnees 3</td>
-                                <td><a href="#"  th:href="@{'/recipe/' + ${recipe.id} + '/show'}" >View</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show'}">View</a></td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
-                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Remove</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/delete'}">Delete</a></td>
                             </tr>
                         </table>
                     </div>
@@ -94,13 +62,6 @@
             </div>
         </div>
     </div>
-</div>
-
-
-
-
-<div >
-
 </div>
 
 </body>

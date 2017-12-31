@@ -1,13 +1,13 @@
 package com.recipe.project.repositories;
 
 
+import com.recipe.project.bootstrap.RecipeBootstrap;
 import com.recipe.project.domain.UnitOfMeasure;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -18,17 +18,26 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by aah on 27/11/17.
  */
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@Ignore
-public class UnitOfMeasureRepositoryIntTest {
 
+@RunWith(SpringRunner.class)
+@DataMongoTest
+public class UnitOfMeasureRepositoryIntTest {
 
     @Autowired
     UnitOfMeasureRepository unitOfMeasureRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
+    @Autowired
+    RecipeRepository recipeRepository;
 
+    RecipeBootstrap recipeBootstrap;
     @Before
     public void setUp() throws Exception {
+        recipeRepository.deleteAll();
+        unitOfMeasureRepository.deleteAll();
+        categoryRepository.deleteAll();
+        recipeBootstrap = new RecipeBootstrap(categoryRepository,recipeRepository,unitOfMeasureRepository);
+        recipeBootstrap.onApplicationEvent(null);
     }
 
     @Test

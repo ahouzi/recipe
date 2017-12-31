@@ -3,6 +3,8 @@ package com.recipe.project.domain;
 import com.recipe.project.domain.type.Difficulty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,9 +15,10 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@Document
 public class Recipe {
 
-
+    @Id
     private String id;
     private String description;
     private Integer prepTime;
@@ -24,21 +27,21 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-    Set<Ingredient> ingredientList=new HashSet<>();;
-    private Difficulty difficulty;
+    private Set<Ingredient> ingredientList = new HashSet<>();
     private Byte[] image;
+    private Difficulty difficulty;
     private Notes notes;
 
-    private Set<Category> categories= new HashSet<>();;
+    @DBRef
+    private Set<Category> categories = new HashSet<>();
 
     public void setNotes(Notes notes) {
-        this.notes = notes;
         if (notes != null) {
-            notes.setRecipe(this);
+            this.notes = notes;
         }
     }
+
     public Recipe addIngredient(Ingredient ingredient){
-        ingredient.setRecipe(this);
         this.ingredientList.add(ingredient);
         return this;
     }

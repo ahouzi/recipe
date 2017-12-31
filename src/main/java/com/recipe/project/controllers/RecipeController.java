@@ -61,14 +61,14 @@ public class RecipeController {
     @GetMapping
     @RequestMapping("/recipe/new")
     public String newRecipe(Model model){
-        model.addAttribute("recipeForm", new RecipeCommand());
+        model.addAttribute("recipe", new RecipeCommand());
         return "recipe/recipeForm";
     }
 
     @GetMapping
     @RequestMapping("/recipe/{id}/update")
     public String updateRecipe(Model model, @PathVariable String id ) {
-        model.addAttribute("recipeForm",recipeService.getRecipeCommandById(id));
+        model.addAttribute("recipe",recipeService.getRecipeCommandById(id));
         return "recipe/recipeForm";
     }
 
@@ -81,7 +81,8 @@ public class RecipeController {
 
 
 
-    @PostMapping("recipe")
+    @PostMapping
+    @RequestMapping("recipe")
     public String saveOrUpdate(@Valid @ModelAttribute("recipeForm") RecipeCommand recipeCommand, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){

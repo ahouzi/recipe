@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  */
 public class UnitOfMeasureToUnitOfMeasureCommandTest {
 
-    public static final String DESCRIPTION = "description";
+    public static final String DESCRIPTION = "uom";
     public static final String ID_VALUE = "1";
 
     UnitOfMeasureToUnitOfMeasureCommand converter;
