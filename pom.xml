@@ -103,6 +103,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+
+
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
@@ -115,6 +118,33 @@
 
 					<verbose>true</verbose>
 					<images>
+
+						<!--mysql container-->
+						<image>
+							<name>mysql</name>
+							<alias>localhost</alias>
+							<run>
+								<!--expose port for dn-->
+								<ports>
+									<port>3306:3306</port>
+								</ports>
+
+								<!--set env prams for mysql image-->
+								<env>
+									<MYSQL_DATABASE>sfg_dev</MYSQL_DATABASE>
+									<MYSQL_ALLOW_EMPTY_PASSWORD>yes</MYSQL_ALLOW_EMPTY_PASSWORD>
+								</env>
+								<tmpfs>
+									<mount>/home/aah/tmp</mount>
+									<mount>/var/lib/mysql</mount>
+								</tmpfs>
+								<!--wait for db to start-->
+								<wait>
+									<time>10000</time>
+								</wait>
+							</run>
+						</image>
+
 						<image>
 							<name>${docker.image.prefix}/${docker.image.name}</name>
 							<build>
@@ -129,6 +159,21 @@
 									<tag>${project.version}</tag>
 								</tags>
 							</build>
+							<run>
+								<ports>
+									<port>8080:8080</port>
+								</ports>
+								<links>
+									<link>localhost:localhost</link>
+								</links>
+								<env>
+
+									<SPRING_PROFILES_ACTIVE>dev</SPRING_PROFILES_ACTIVE>
+								</env>
+								<dependsOn>
+									<container>mysql</container>
+								</dependsOn>
+							</run>
 						</image>
 					</images>
 				</configuration>

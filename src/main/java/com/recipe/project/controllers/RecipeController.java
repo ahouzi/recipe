@@ -47,9 +47,6 @@ public class RecipeController {
 
     }
 
-
-
-
     //this is optimal
     @GetMapping("/recipe/{id}/show")
     public String getRecipe(Model model, @PathVariable String id ){
@@ -81,7 +78,8 @@ public class RecipeController {
 
 
 
-    @PostMapping("recipe")
+    @PostMapping
+    @RequestMapping("/recipe")
     public String saveOrUpdate(@Valid @ModelAttribute("recipeForm") RecipeCommand recipeCommand, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
