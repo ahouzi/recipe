@@ -112,7 +112,7 @@
 						<!--mysql container-->
 						<image>
 							<name>mysql</name>
-							<alias>localhost</alias>
+							<alias>mysqldb</alias>
 							<run>
 								<!--expose port for dn-->
 								<ports>
@@ -120,6 +120,8 @@
 								</ports>
 								<!--set env prams for mysql image-->
 								<env>
+
+
 									<!--<MYSQL_DATABASE>sfg_dev</MYSQL_DATABASE>-->
 									<MYSQL_ALLOW_EMPTY_PASSWORD>yes</MYSQL_ALLOW_EMPTY_PASSWORD>
 								</env>
@@ -153,7 +155,7 @@
 									<port>8080:8080</port>
 								</ports>
 								<links>
-									<link>localhost:localhost</link>
+									<link>mysqldb:mysqldb</link>
 								</links>
 								<env>
 									<SPRING_PROFILES_ACTIVE>dev</SPRING_PROFILES_ACTIVE>
