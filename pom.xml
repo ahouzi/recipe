@@ -104,11 +104,15 @@
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.20.0</version>
+
 				<configuration>
+
 					<!--<dockerHost>http://127.0.0.1:2376</dockerHost>-->
 					<dockerHost>unix:///var/run/docker.sock</dockerHost>
+
 					<verbose>true</verbose>
 					<images>
+
 						<!--mysql container-->
 						<image>
 							<name>mysql</name>
@@ -118,16 +122,16 @@
 								<ports>
 									<port>3306:3306</port>
 								</ports>
+
 								<!--set env prams for mysql image-->
 								<env>
-									<!--<MYSQL_DATABASE>sfg_dev</MYSQL_DATABASE>-->
+									<MYSQL_DATABASE>sfg_dev</MYSQL_DATABASE>
 									<MYSQL_ALLOW_EMPTY_PASSWORD>yes</MYSQL_ALLOW_EMPTY_PASSWORD>
 								</env>
-								<volumes>
-									<bind>
-										<volume>/home/aah/tmp:/var/lib/mysql</volume>
-									</bind>
-								</volumes>
+								<tmpfs>
+									<mount>/home/aah/tmp</mount>
+									<mount>/var/lib/mysql</mount>
+								</tmpfs>
 								<!--wait for db to start-->
 								<wait>
 									<time>10000</time>
@@ -165,25 +169,25 @@
 						</image>
 					</images>
 				</configuration>
-                <executions>
-                    <execution>
-                        <id>start</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <!-- "build" should be used to create the images with the
-                                 artifact -->
-                            <goal>build</goal>
-                            <goal>start</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>stop</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>start</id>-->
+                        <!--<phase>pre-integration-test</phase>-->
+                        <!--<goals>-->
+                            <!--&lt;!&ndash; "build" should be used to create the images with the-->
+                                 <!--artifact &ndash;&gt;-->
+                            <!--<goal>build</goal>-->
+                            <!--<goal>start</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>stop</id>-->
+                        <!--<phase>post-integration-test</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>stop</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.gmavenplus</groupId>
