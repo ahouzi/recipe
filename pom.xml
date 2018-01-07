@@ -99,26 +99,16 @@
 					<check />
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-
-
 
 			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.20.0</version>
-
 				<configuration>
-
 					<!--<dockerHost>http://127.0.0.1:2376</dockerHost>-->
 					<dockerHost>unix:///var/run/docker.sock</dockerHost>
-
 					<verbose>true</verbose>
 					<images>
-
 						<!--mysql container-->
 						<image>
 							<name>mysql</name>
@@ -128,16 +118,16 @@
 								<ports>
 									<port>3306:3306</port>
 								</ports>
-
 								<!--set env prams for mysql image-->
 								<env>
-									<MYSQL_DATABASE>sfg_dev</MYSQL_DATABASE>
+									<!--<MYSQL_DATABASE>sfg_dev</MYSQL_DATABASE>-->
 									<MYSQL_ALLOW_EMPTY_PASSWORD>yes</MYSQL_ALLOW_EMPTY_PASSWORD>
 								</env>
-								<tmpfs>
-									<mount>/home/aah/tmp</mount>
-									<mount>/var/lib/mysql</mount>
-								</tmpfs>
+								<volumes>
+									<bind>
+										<volume>/home/aah/tmp:/var/lib/mysql</volume>
+									</bind>
+								</volumes>
 								<!--wait for db to start-->
 								<wait>
 									<time>10000</time>
@@ -149,7 +139,6 @@
 							<name>${docker.image.prefix}/${docker.image.name}</name>
 							<build>
 								<dockerFileDir>${project.basedir}/target/dockerfile/</dockerFileDir>
-
 								<!--copies artficact to docker build dir in target-->
 								<assembly>
 									<descriptorRef>artifact</descriptorRef>
@@ -167,7 +156,6 @@
 									<link>localhost:localhost</link>
 								</links>
 								<env>
-
 									<SPRING_PROFILES_ACTIVE>dev</SPRING_PROFILES_ACTIVE>
 								</env>
 								<dependsOn>
@@ -177,6 +165,25 @@
 						</image>
 					</images>
 				</configuration>
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <!-- "build" should be used to create the images with the
+                                 artifact -->
+                            <goal>build</goal>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.gmavenplus</groupId>
@@ -205,28 +212,28 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-failsafe-plugin</artifactId>-->
-				<!--<version>2.20</version>-->
-				<!--<configuration>-->
-					<!--<includes>-->
-						<!--<include>**/*IntTest.java</include>-->
-					<!--</includes>-->
-					<!--<additionalClasspathElements>-->
-						<!--<additionalClasspathElement>${basedir}/target/classes</additionalClasspathElement>-->
-					<!--</additionalClasspathElements>-->
-					<!--<parallel>none</parallel>-->
-				<!--</configuration>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<goals>-->
-							<!--<goal>integration-test</goal>-->
-							<!--<goal>verify</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
-			<!--</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.20</version>
+				<configuration>
+					<includes>
+						<include>**/*IntTest.java</include>
+					</includes>
+					<additionalClasspathElements>
+						<additionalClasspathElement>${basedir}/target/classes</additionalClasspathElement>
+					</additionalClasspathElements>
+					<parallel>none</parallel>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
