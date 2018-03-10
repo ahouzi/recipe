@@ -1,0 +1,62 @@
+ssh -i "/home/aah/.ssh/ocean.pub" root@138.68.78.213
+sudo ssh -v -i ~/.ssh/oceannew root@138.197.188.208
+
+docker swarm join --token SWMTKN-1-5ad8vprmjthj31vm4izvqedxsb8amqidrr6f28l82bf5wz1430-e7p059gwshle1bkg2tmbajh2b 159.89.21.242:2377
+
+docker swarm  join-token manager
+
+docker swarm  join-token worker
+
+
+ps -ef | grep docker
+
+
+
+
+# Example MVN Command for CI
+mvn clean package verify docker:push
+
+#start docker compose in background
+docker-compose up -d
+
+#stop docker-compose
+docker-compose down
+
+
+## Create portainer service in docker swarm
+docker service create \
+--name portainer \
+--publish 9000:9000 \
+--constraint 'node.role == manager' \
+--mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+portainer/portainer \
+-H unix:///var/run/docker.sock
+
+## ssh to node on DigitalOcean
+ssh -i "~/.ssh/<your key here>"  root@<your node ip here>
+
+#Init Docker Swarm
+docker swarm init
+
+## Create portainer service in docker swarm on port 80
+docker service create \
+--name portainer \
+--publish 80:9000 \
+--constraint 'node.role == manager' \
+--mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+portainer/portainer \
+-H unix:///var/run/docker.sock
+
+docker swarm init --force-new-cluster --advertise-addr node3:2377
+
+
+
+# MySQL Service
+docker service create \
+--name mysqldb -p 3306:3306 \
+--mount type=volume,source=aahTemp,target=/var/lib/mysql,volume-driver=local \
+-e MYSQL_ALLOW_EMPTY_PASSWORD=yes \
+mysql
+
+# List Processes in service
+docker service ps mysqldb
