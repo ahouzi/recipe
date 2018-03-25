@@ -42,7 +42,7 @@ public class RecipeController {
         JsonObject responseJson = new JsonObject();
 
             responseJson.addProperty("type", "msg");
-            responseJson.addProperty("val", "رمز إعادة تعيين أرسل إليك الآن إلى البريد الإلكتروني الذي صرحت به");
+            responseJson.addProperty("val", "");
             return new ResponseEntity<String>(responseJson.toString(), HttpStatus.OK);
 
     }

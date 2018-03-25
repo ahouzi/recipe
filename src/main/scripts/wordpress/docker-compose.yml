@@ -6,6 +6,10 @@ services:
      volumes:
        - db_data:/var/lib/mysql
      restart: always
+     networks:
+       - database_net
+     deploy:
+       replicas: 1
      environment:
        MYSQL_ROOT_PASSWORD: wordpress
        MYSQL_DATABASE: wordpress
@@ -16,6 +20,10 @@ services:
      depends_on:
        - db
      image: wordpress:latest
+     networks:
+       - database_net
+     deploy:
+       replicas: 1
      ports:
        - "8000:80"
      restart: always
@@ -23,4 +31,7 @@ services:
        WORDPRESS_DB_HOST: db:3306
        WORDPRESS_DB_PASSWORD: wordpress
 volumes:
-    db_data:
+  db_data:
+networks:
+  database_net:
+    driver: overlay

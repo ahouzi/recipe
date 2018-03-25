@@ -32,6 +32,8 @@ services:
       - database_net
     deploy:
       replicas: 3
+volumes:
+  aahTemp:
 networks:
   database_net:
     driver: overlay
