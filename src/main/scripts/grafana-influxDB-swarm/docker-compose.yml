@@ -1,0 +1,37 @@
+version: "3"
+services:
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+      - "2003:2003"
+    networks:
+      - database_net
+    volumes:
+      - ./influxdb.conf:/etc/influxdb/influxdb.conf
+      - influx:/var/lib/influxdb
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+    networks:
+      - database_net
+    deploy:
+      replicas: 2
+volumes:
+  influx:
+networks:
+  database_net:
+    driver: overlay

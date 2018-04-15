@@ -18,19 +18,3 @@ services:
       - "3000:3000"
     links:
       - influxdb
-  scope:
-    container_name: weave-scope
-    volumes:
-      - "/var/run/:/var/run:rw"
-    command:
-      - "--probe.docker"
-      - "true"
-    image: weaveworks/scope:latest
-    network_mode: "host"
-    pid: "host"
-    ports:
-      - "4040:4040"
-    privileged: true
-    tty: true
-    labels:
-      - "works.weave.role=system"
